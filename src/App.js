@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import useFormulario from './hooks/useFormulario'
 import Input from './components/Input'
 import Card from './components/Card'
@@ -5,17 +6,28 @@ import Container from './components/Container'
 import Button from './components/Button'
 
 function App() {
-  const [formulario, handleChange] = useFormulario(
+  const [usuarios, setUsuarios] = useState([])
+  const [formulario, handleChange, reset] = useFormulario(
     { name: '', 
     lastName: '', 
-    email: '' })
+    email: '' 
+  })
 
-  console.log(formulario)
+  const submit = e => {
+    e.preventDefault()
+    setUsuarios([
+      ...usuarios,
+      formulario
+    ])
+    reset()
+  }
+  
   return (
-    <Container>
+    <div style={{marginTop: '15%'}}>
+      <Container>
       <Card>
         <div style={{ padding: 20 }}>
-          <form>
+          <form onSubmit={submit}>
             <Input
               label='Nombre'
               name='name'
@@ -42,7 +54,14 @@ function App() {
         </div>
 
       </Card>
+      <Card>
+        <ul>
+          {usuarios.map(x => <li key={x.email}>{`${x.name} ${x.lastName} ${x.email}`}</li>)}
+        </ul>
+      </Card>
     </Container >
+    </div>
+    
 
 
   );
